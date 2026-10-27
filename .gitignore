@@ -1,0 +1,9 @@
+# 系统文件
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# 敏感配置（不要提交 API Key / 数据库密码）
+*.env
+.env*
+secrets.*
