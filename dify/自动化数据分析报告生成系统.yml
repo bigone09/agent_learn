@@ -1,0 +1,405 @@
+app:
+  description: ''
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  icon_type: emoji
+  mode: advanced-chat
+  name: 自动化数据分析报告生成系统
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/mimo:0.0.12@15e6a7b32bbe35faba5e3a646eaa14fdca34d9e95909586f6313d5dd364f8d95
+    version: null
+kind: app
+version: 0.7.0
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - document
+      allowed_file_upload_methods:
+      - remote_url
+      - local_file
+      enabled: true
+      fileUploadConfig:
+        attachment_image_file_size_limit: 2
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        file_upload_limit: 20
+        image_file_batch_limit: 10
+        image_file_size_limit: 10
+        knowledge_file_size_limit: 15
+        single_chunk_attachment_limit: 10
+        skill_file_size_limit: 50
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: start
+        targetType: document-extractor
+      id: 1792072516794-source-1792072537226-target
+      selected: false
+      source: '1792072516794'
+      sourceHandle: source
+      target: '1792072537226'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: start
+        targetType: llm
+      id: 1792072516794-source-1792201559849-target
+      selected: false
+      source: '1792072516794'
+      sourceHandle: source
+      target: '1792201559849'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: document-extractor
+        targetType: llm
+      id: 1792072537226-source-llm-target
+      selected: false
+      source: '1792072537226'
+      sourceHandle: source
+      target: llm
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: code
+        targetType: llm
+      id: 1792201267354-source-1793102318566-target
+      selected: false
+      source: '1792201267354'
+      sourceHandle: source
+      target: '1793102318566'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: code
+      id: 1792201559849-source-1792201267354-target
+      selected: false
+      source: '1792201559849'
+      sourceHandle: source
+      target: '1792201267354'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: answer
+      id: 1793102318566-source-1793105161423-target
+      source: '1793102318566'
+      sourceHandle: source
+      target: '1793105161423'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: code
+      id: llm-source-1792201267354-target
+      selected: false
+      source: llm
+      sourceHandle: source
+      target: '1792201267354'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: llm
+      id: llm-source-1792201559849-target
+      selected: false
+      source: llm
+      sourceHandle: source
+      target: '1792201559849'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        selected: false
+        title: 用户输入
+        type: start
+        variables: []
+      height: 72
+      id: '1792072516794'
+      position:
+        x: 158.5714285714286
+        y: 406.25952380952384
+      positionAbsolute:
+        x: 158.5714285714286
+        y: 406.25952380952384
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        is_array_file: true
+        selected: false
+        title: 文档提取器
+        type: document-extractor
+        variable_selector:
+        - sys
+        - files
+      height: 104
+      id: '1792072537226'
+      position:
+        x: 527.7142857142858
+        y: 12.857142857142883
+      positionAbsolute:
+        x: 527.7142857142858
+        y: 12.857142857142883
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        code: "import json\nimport re\nimport ast\n\ndef main(code: str) -> dict:\n\
+          \    s = code.strip()\n\n    # 1. 清洗:剥围栏、截取JSON主体\n    m = re.search(r\"\
+          ```(?:json)?\\s*(.*)\\s*```\", s, re.S)\n    if m:\n        s = m.group(1).strip()\n\
+          \    else:\n        start, end = s.find(\"{\"), s.rfind(\"}\")\n       \
+          \ if start != -1 and end > start:\n            s = s[start:end + 1]\n\n\
+          \    # 2. 解析成 dict\n    try:\n        cfg = json.loads(s)\n    except json.JSONDecodeError:\n\
+          \        cfg = ast.literal_eval(s)\n\n    # 3. 关键:包进 echarts 代码块\n    output\
+          \ = \"\\n```echarts\\n\" + json.dumps(cfg, indent=2, ensure_ascii=False)\
+          \ + \"\\n```\"\n    return {\"output\": output}\n"
+        code_language: python3
+        outputs:
+          output:
+            children: null
+            type: string
+        selected: false
+        title: 代码执行
+        type: code
+        variables:
+        - value_selector:
+          - '1792201559849'
+          - text
+          value_type: string
+          variable: code
+      height: 51
+      id: '1792201267354'
+      position:
+        x: 1415.142857142857
+        y: -7.026190476190468
+      positionAbsolute:
+        x: 1415.142857142857
+        y: -7.026190476190468
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        model:
+          completion_params:
+            temperature: 0.4
+          mode: chat
+          name: mimo-v2.6-pro
+          provider: langgenius/mimo/mimo
+        model_selector: null
+        prompt_template:
+        - id: 0f99f6d6-4f2c-4f56-8d65-cce7a4b2d38b
+          role: system
+          text: '你会生成 ECharts 图表配置。根据提供的数据样例{{#llm.text#}}与用户的分析需求{{#sys.query#}}输出一个合法的
+            ECharts option 对象。
+
+            步骤：
+
+            1.你需要根据用户的分析需求{{#sys.query#}}来决定使用什么图表类型
+
+            2.对提供的数据{{#sys.files#}}进行可视化代码编写，注意样例数据{{#1792072537226.text#}}只有前五行
+
+            严格要求:
+
+            1. 只输出一个 JSON 对象,不要任何解释文字,不要 markdown 代码块标记(不要 ```)
+
+            2. 必须使用输入数据中的真实数值,禁止编造,禁止用pd.read_csv 或任何文件读取
+
+            3. 根据数据维度和分析目标推荐图表类型
+
+            4. 中文标签保持中文
+
+            5. series 里的数值必须是数字类型,不要加引号'
+        reasoning_format: separated
+        selected: false
+        title: 可视化代码编写
+        type: llm
+        vision:
+          enabled: false
+      height: 87
+      id: '1792201559849'
+      position:
+        x: 1087.428571428571
+        y: 874.7476190476191
+      positionAbsolute:
+        x: 1087.428571428571
+        y: 874.7476190476191
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: mimo-v2.6-pro
+          provider: langgenius/mimo/mimo
+        prompt_template:
+        - id: 02f65040-5ba5-4c5c-9d5d-534f2de93ba5
+          role: system
+          text: 你是一名数据分析专家，需要对{{#1792201267354.output#}}进行分析，根据用户的问题{{#sys.query#}}解答，需要进行概括与差异分析
+        reasoning_format: separated
+        selected: false
+        title: 分析节点
+        type: llm
+        vision:
+          enabled: false
+      height: 87
+      id: '1793102318566'
+      position:
+        x: 1704.2857142857142
+        y: 525.8309523809523
+      positionAbsolute:
+        x: 1704.2857142857142
+        y: 525.8309523809523
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        answer: '{{#1793102318566.text#}}、{{#1792201267354.output#}}'
+        selected: false
+        title: 分析
+        type: answer
+        variables: []
+      height: 120
+      id: '1793105161423'
+      position:
+        x: 1973.428571428571
+        y: 195.71428571428575
+      positionAbsolute:
+        x: 1973.428571428571
+        y: 195.71428571428575
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        memory:
+          query_prompt_template: '{{#sys.files#}}{{#sys.query#}}'
+          role_prefix:
+            assistant: ''
+            user: ''
+          window:
+            enabled: false
+            size: 10
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: mimo-v2.6-pro
+          provider: langgenius/mimo/mimo
+        model_selector: null
+        prompt_template:
+        - id: 7fee9d60-3295-47dc-a360-0f67af0e50a3
+          role: system
+          text: '你是一名数据整理专家，需要根据用户的输入文件{{#1792072537226.text#}}来整理数据
+
+            整理格式为CSV格式，只输出列名、类型、前五行样例、总行数。'
+        reasoning_format: separated
+        selected: false
+        title: 数据整理
+        type: llm
+        vision:
+          enabled: false
+      height: 87
+      id: llm
+      position:
+        x: 908.2857142857142
+        y: 12.857142857142883
+      positionAbsolute:
+        x: 908.2857142857142
+        y: 12.857142857142883
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    viewport:
+      x: -323.0960290804471
+      y: 374.34336729731933
+      zoom: 0.5305007982786393
+  rag_pipeline_variables: []
